@@ -1,4 +1,39 @@
-.my-header{
-background-color: #20315a; 
-color: white;
+.my-header {
+  background-color: #20315a;
+  color: white;
+}
+
+.main-panel {
+  background-color: lightgrey;
+}
+
+.bottom-panel {
+  padding: 0%;
+}
+
+.left-panel {
+  background-color: lightskyblue;
+}
+
+.custom-label {
+  font-size: 150%;
+  font-weight: bold;
+  margin-left: 5%;
+}
+
+.input-field {
+  margin: 0% 0% 10% 0%;
+  padding-bottom: 2%;
+  font-weight: bold;
+}
+
+.search-box {
+    flex: 1 1 auto;
+    padding-top: 5%;
+
+}
+
+
+.btn-font{
+    font-size: 85%;
 }

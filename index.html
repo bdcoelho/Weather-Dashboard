@@ -9,6 +9,11 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+
     <!-- fontawesome  -->
     <link
       rel="stylesheet"
@@ -33,103 +38,53 @@
   <body>
     <!-- Main Bootstrap Search -->
     <div class="jumbotron my-header">
-        <h1 class="text-center">
-          <strong> Weather Dashboard</strong>
-        </h1>
-      </div>
+      <h1 class="text-center">
+        <strong> Weather Dashboard</strong>
+      </h1>
+    </div>
 
-      
     <div class="container">
       <!-- Jumbotron for Title -->
 
-
       <!-- Row for Searching New York Times -->
       <div class="row">
-        <div class="col-sm-12">
-          <br />
-          <!-- First card is for handling the search parameters -->
-          <div class="card">
-            <div class="card-header">
-              <strong> <i class="fa fa-list-alt"></i> Search Parameters</strong>
-            </div>
-            <div class="card-body">
-              <!-- Here we create an HTML Form for handling the inputs-->
-              <form role="form">
-                <!-- Here we create the text box for capturing the search term-->
-                <div class="form-group">
-                  <label for="search">Search Term:</label>
-                  <input type="text" class="form-control" id="search-term" />
-                </div>
-
-                <!-- Here we capture the number of records that the user wants to retrieve  -->
-                <div class="form-group">
-                  <label for="pwd">Number of Records to Retrieve:</label>
-                  <select
-                    id="article-count"
-                    class="custom-select"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <option selected value="1">1</option>
-                    <!-- Setting the option for 5 as default -->
-                    <option value="5" selected>5</option>
-                    <option value="10">10</option>
-                  </select>
-                </div>
-
-                <!-- Here we capture the Start Year Parameter-->
-                <div class="form-group">
-                  <label for="start-year">Start Year (Optional):</label>
-                  <input type="text" class="form-control" id="start-year" />
-                </div>
-
-                <!-- Here we capture the End Year Parameter -->
-                <div class="form-group">
-                  <label for="end-year">End Year (Optional):</label>
-                  <input type="text" class="form-control" id="end-year" />
-                </div>
-
-                <!-- Here we have our final submit button -->
-                <button type="submit" class="btn btn-default" id="run-search">
-                  <i class="fa fa-search"></i> Search
-                </button>
-                <button class="btn btn-default" id="clear-all">
-                  <i class="fa fa-trash"></i> Clear Results
-                </button>
-              </form>
-            </div>
+        <div class="col-sm-4 left-panel">
+          <!-- Here we create the text box for capturing the search term-->
+          <div class="search-box">
+            <h3>Search for a city</h3>
+            <input type="text" class="input-field" id="search-term" />
+            <button
+              type="submit"
+              class="btn btn-primary btn-font"
+              id="run-search"
+            >
+              <i class="fa fa-search"></i> Search
+            </button>
           </div>
-        </div>
-      </div>
 
-      <!-- This row will handle all of the retrieved articles -->
-      <div class="row">
-        <div class="col-sm-12">
-          <br />
-
-          <!-- This card will initially be made up of a card and wells for each of the articles retrieved -->
           <div class="card">
             <!-- card Heading for the retrieved articles box -->
             <div class="card-header">
-              <strong> <i class="fa fa-table"></i> Top Articles</strong>
+              <strong> <i class="fa fa-table"></i> Results</strong>
             </div>
 
             <!-- This main card will hold each of the resulting articles -->
             <div class="card-body" id="article-section"></div>
           </div>
         </div>
+
+        <div class="col-sm-8 main-panel">
+          <br />
+          <br />
+        </div>
       </div>
 
-      <!-- Footer Region -->
+      <!-- This row will handle all of the retrieved articles -->
       <div class="row">
-        <div class="col-sm-12">
-          <!-- Line Break followed by closing -->
-          <hr />
-          <h5 class="text-center">
-            <small
-              >Made with lots and lots of
-              <i class="fa fa-heart"></i>
-            </small>
-          </h5>
+        <div class="col-sm-12 bottom-panel">
+          <br />
+
+          <!-- This card will initially be made up of a card and wells for each of the articles retrieved -->
         </div>
       </div>
     </div>
@@ -137,6 +92,7 @@
     <!-- jQuery JS -->
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+
     <script src="./Assets/script.js"></script>
   </body>
 </html>
