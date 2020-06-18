@@ -6,17 +6,11 @@ $(document).ready(function () {
 
     queryParams.address = $("#search-term").val().trim();
 
-    console.log("---------------\nURL: " + queryURLGeo + "\n---------------");
-    console.log(queryURLGeo + $.param(queryParams));
-
     return queryURLGeo + $.param(queryParams);
   }
   // var queryURL = "https://api.openweathermap.org/data/2.5/weather?";
 
   function weatherURL(lat, lng) {
-    console.log(lat);
-    console.log(lng);
-
     var queryURL = "https://api.openweathermap.org/data/2.5/onecall?";
 
     // lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
@@ -36,9 +30,6 @@ $(document).ready(function () {
     event.preventDefault();
 
     var queryURLGeo = buildGeoCodeURL();
-    console.log(queryURLGeo);
-    // Make the AJAX request to the API - GETs the JSON data at the queryURL.
-    // The data then gets passed as an argument to the updatePage function
 
     $.ajax({
       url: queryURLGeo,
@@ -48,30 +39,24 @@ $(document).ready(function () {
       var lng = responseGeo.results[0].geometry.location.lng;
 
       var queryURL = weatherURL(lat, lng);
-      console.log(queryURL);
       $.ajax({
         url: queryURL,
         method: "GET",
       }).then(function (response) {
         console.log(response);
+
+        var location = response.timezone;
+        var unix_timestamp = response.current.dt;
+        var dateTime = moment
+          .unix(unix_timestamp)
+          .format("ddd, MMM Do, YYYY h:mm A");
+        var temp = response.current.temp - 273.15;
+        var rH = response.current.humidity;
+        var windSpeed = response.current.wind_speed;
+        var UVIndex = response.current.uvi;
       });
 
-      // let unix_timestamp = 1549312452
-      // // Create a new JavaScript Date object based on the timestamp
-      // // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-      // var date = new Date(unix_timestamp * 1000);
-      // // Hours part from the timestamp
-      // var hours = date.getHours();
-      // // Minutes part from the timestamp
-      // var minutes = "0" + date.getMinutes();
-      // // Seconds part from the timestamp
-      // var seconds = "0" + date.getSeconds();
 
-      // var date=response.
-      // var temp=response.
-      // var rH=response.
-      // var windSpeed=response.
-      // var UV index=response.
     });
   });
 });
