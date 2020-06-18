@@ -29,16 +29,16 @@ $(document).ready(function () {
     // (in addition to clicks). Prevents the page from reloading on form submit.
     event.preventDefault();
 
-    var queryURLGeo = buildGeoCodeURL();
+    // var queryURLGeo = buildGeoCodeURL();
 
-    $.ajax({
-      url: queryURLGeo,
-      method: "GET",
-    }).then(function (responseGeo) {
-      var lat = responseGeo.results[0].geometry.location.lat;
-      var lng = responseGeo.results[0].geometry.location.lng;
+    // $.ajax({
+    //   url: queryURLGeo,
+    //   method: "GET",
+    // }).then(function (responseGeo) {
+    //   var lat = responseGeo.results[0].geometry.location.lat;
+    //   var lng = responseGeo.results[0].geometry.location.lng;
 
-      var queryURL = weatherURL(lat, lng);
+      var queryURL = weatherURL(37.8, 144.9);
       $.ajax({
         url: queryURL,
         method: "GET",
@@ -47,16 +47,43 @@ $(document).ready(function () {
 
         var location = response.timezone;
         var unix_timestamp = response.current.dt;
-        var dateTime = moment
-          .unix(unix_timestamp)
-          .format("ddd, MMM Do, YYYY h:mm A");
-        var temp = response.current.temp - 273.15;
-        var rH = response.current.humidity;
-        var windSpeed = response.current.wind_speed;
-        var UVIndex = response.current.uvi;
+        var date = moment.unix(unix_timestamp).format("ddd, MMM Do, YYYY");
+        var time = moment.unix(unix_timestamp).format("h:mm A");
+
+        var temp = Math.round((response.current.temp - 273.15) * 10) / 10;
+        var rH = Math.round(response.current.humidity * 10) / 10;
+        var windSpeed = Math.round(response.current.wind_speed * 10) / 10;
+        var UVIndex = Math.round(response.current.uvi * 10) / 10;
+
+        currentObject = {
+          Temperature: temp,
+          Humidity: rH,
+          "Wind Speed": windSpeed,
+          "UV Index": UVIndex,
+        };
+
+        Object.keys(currentObject).forEach(function (item) {
+          var cList = $("#current-data");
+          var myLi = $("<li/>")
+            .html(item + ":\t\t\t\t" + currentObject[item])
+            .appendTo(cList);
+        });
+
+        $("#location").html(location);
+        $("#date").html(date);
+        $("#time").html(time);
+
+var dailyForecastArray=response.daily;
+console.log(dailyForecastArray);
+dailyForecastArray.forEach(function(item, index, array){
+  console.log(dailyForecastArray[index].dt)
+}
+
+
+)
+
       });
-
-
-    });
+    // });
   });
 });
+
