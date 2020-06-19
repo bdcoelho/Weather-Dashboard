@@ -4,9 +4,14 @@
 }
 
 .main-panel {
-  background-color: lightgrey;
-}
+  background-color: rgb(215, 237, 238);
+padding-bottom: 5%;
 
+}
+.row-top{
+background-color: lightgray;
+
+}
 .bottom-panel {
   padding: 0%;
 }
@@ -50,9 +55,12 @@ ul{
 }
 
 .bottom-panel-1{
-  background-color: rgb(26, 90, 154);
-margin: 1%;
-}
+  background-color: rgb(54, 104, 155);
+  color: white;
+margin: 1.1%;
+padding: 1% 0% 1% 2%;
+
+ }
 
 .bottom-panel-2{
 
@@ -60,4 +68,8 @@ margin: 1%;
   margin: 1%;
 
 }
+.forecast-margin{
+  margin-top: 2%;
+margin-left: 3%;
 
+}
