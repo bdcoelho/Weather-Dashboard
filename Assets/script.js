@@ -1,6 +1,17 @@
 $(document).ready(function () {
   var lat = -37.8;
   var lng = 144.9;
+  function myRGB(val) {
+    var red = 0;
+    var green = 0;
+    var blue = 0;
+    var min = 0;
+    var max = 10;
+    red = 0 + Math.round((val / 10) * 255);
+    green = 255 - Math.round((val / 10) * 255);
+    myCol = "rgb(" + red + "," + green + "," + blue+")";
+    return myCol;
+  }
 
   function buildGeoCodeURL() {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
@@ -14,24 +25,28 @@ $(document).ready(function () {
   // var queryURL = "https://api.openweathermap.org/data/2.5/weather?";
 
   function weatherURL(lat, lng) {
+currentLocation="1";
     var queryURL = "https://api.openweathermap.org/data/2.5/onecall?";
-
     // lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
-
     var queryParams = { appid: "c8a65159cdc7e9fd6ca2d010f396a049" };
-
     queryParams.lat = lat;
     queryParams.lon = lng;
+    return [queryURL + $.param(queryParams),currentLocation];
+    console.log(currentLocation)
 
-    return queryURL + $.param(queryParams);
+
+
+
   }
 
   function getWeather() {
-    var queryURL = weatherURL(lat, lng);
+    var queryURL = weatherURL(lat, lng)[0];
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
+///watch this
+
       var location = response.timezone;
       var unix_timestamp = response.current.dt;
       var date = moment
@@ -55,19 +70,35 @@ $(document).ready(function () {
 
       Object.keys(currentObject).forEach(function (item, index) {
         var myLi = $("#li" + index).html(
-          "<b>" + item + "</b>" + ":\t\t\t\t" + currentObject[item]
+          "<b>" +
+            item +
+            "</b>" +
+            ":\t\t\t\t" +
+            "<span id=id" +
+            index +
+            ">" +
+            currentObject[item] +
+            "</span>"
         );
+        if (item === "UV Index") {
+          var val=currentObject[item]
+          myCol = myRGB(val);
+          console.log(myCol);
+          $("#id" + index).css("background-color", myCol);
+          $("#id" + index).css("border-radius", "20%");
+
+        }
       });
 
       $("#location").html(location);
       $("#date").html(date);
       $("#time").html(time);
 
-      var dailyForecastArray = response.daily.slice(0, 5);
+      var dailyForecastArray = response.daily.slice(1, 6);
       dailyForecastArray.forEach(function (item, index, array) {
         var dayTS = dailyForecastArray[index].dt;
         var weatherIcon = dailyForecastArray[index].weather[0].icon;
-        var forecastDate = moment.unix(dayTS).format("ddd, dd/MM");
+        var forecastDate = moment.unix(dayTS).format("ddd, DD/MM");
         var iconURL =
           "http://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
 
@@ -80,9 +111,9 @@ $(document).ready(function () {
         $("#day" + index + "-date").html(forecastDate);
         $("#day" + index + "-img").attr("src", iconURL);
         $("#day" + index + "-img").attr("alt", "weatherimg");
-        $("#day" + index + "-minTemp").html("Min Temp:" + tempMin);
-        $("#day" + index + "-maxTemp").html("Max Temp:" + tempMax);
-        $("#day" + index + "-rh").html("Humidity:" + rh);
+        $("#day" + index + "-minTemp").html("Min Temp:\t" + tempMin);
+        $("#day" + index + "-maxTemp").html("Max Temp:\t" + tempMax);
+        $("#day" + index + "-rh").html("Humidity:\t" + rh);
       });
       storeHistory(lat, lng, location);
     });
@@ -102,37 +133,65 @@ $(document).ready(function () {
       url: queryURLGeo,
       method: "GET",
     }).then(function (responseGeo) {
+
       lat = responseGeo.results[0].geometry.location.lat;
       lng = responseGeo.results[0].geometry.location.lng;
       getWeather(lat, lng);
     });
   });
+
+
+
+  function storeHistory(lat, lng, location) {
+    var retrieveStorage = localStorage["searchHistory"];
+    var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
+    locationInfo.push({ ui: location, latitude: lat, longitude: lng });
+    var obj = {};
+    for (var i = 0, len = locationInfo.length; i < len; i++)
+      obj[locationInfo[i]["ui"]] = locationInfo[i];
+    locationInfo = new Array();
+    for (var key in obj) locationInfo.push(obj[key]);
+    localStorage["searchHistory"] = JSON.stringify(locationInfo);
+  
+    var searchList = document.getElementById("articleList");
+    searchList.innerHTML = "";
+  
+    for (
+      let i = locationInfo.length - 1;
+      i >= Math.max(locationInfo.length - 10, 0);
+      i--
+    ) {
+      tempLocation = locationInfo[i].ui;
+      var listItem = document.createElement("LI");
+      listItem.setAttribute("class", "list-group-item articleHeadline");
+      listItem.innerHTML = tempLocation;
+      searchList.append(listItem);
+    }
+  }
+
+
+  
+  $("#articleList").on("click", function (event) {
+
+    event.preventDefault();
+
+    console.log(event.target)
+
+
+
+  //   var queryURLGeo = buildGeoCodeURL();
+
+  //   $.ajax({
+  //     url: queryURLGeo,
+  //     method: "GET",
+  //   }).then(function (responseGeo) {
+  //     lat = responseGeo.results[0].geometry.location.lat;
+  //     lng = responseGeo.results[0].geometry.location.lng;
+  //     getWeather(lat, lng);
+    // });
+  });
+
+
 });
 
-function storeHistory(lat, lng, location) {
-  var retrieveStorage = localStorage["searchHistory"];
-  var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
-  locationInfo.push({ ui: location, latitude: lat, longitude: lng });
-  var obj = {};
-  for (var i = 0, len = locationInfo.length; i < len; i++)
-    obj[locationInfo[i]["ui"]] = locationInfo[i];
-  locationInfo = new Array();
-  for (var key in obj) locationInfo.push(obj[key]);
-  localStorage["searchHistory"] = JSON.stringify(locationInfo);
 
-
-
-
-var searchList=document.getElementById("articleList")
-searchList.innerHTML=""
-
-for( let i=locationInfo.length-1; i>=Math.max((locationInfo.length-10),0); i--){
-tempLocation=locationInfo[i].ui;
-var listItem = document.createElement("LI");
-listItem.setAttribute("class", "list-group-item articleHeadline")
-listItem.innerHTML=tempLocation;
-searchList.append(listItem)
-}
-
-
-}
