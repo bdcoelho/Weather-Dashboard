@@ -1,9 +1,6 @@
 $(document).ready(function () {
-
-var lat= -37.8
-var lng= 144.9
-
-
+  var lat = -37.8;
+  var lng = 144.9;
 
   function buildGeoCodeURL() {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
@@ -29,18 +26,18 @@ var lng= 144.9
     return queryURL + $.param(queryParams);
   }
 
-
-
-  function getWeather(){
+  function getWeather() {
     var queryURL = weatherURL(lat, lng);
     $.ajax({
       url: queryURL,
       method: "GET",
-    }).then(function(response) {
-
+    }).then(function (response) {
       var location = response.timezone;
       var unix_timestamp = response.current.dt;
-      var date = moment.unix(unix_timestamp).tz(location).format("ddd, MMM Do, YYYY");
+      var date = moment
+        .unix(unix_timestamp)
+        .tz(location)
+        .format("ddd, MMM Do, YYYY");
       var time = moment.unix(unix_timestamp).tz(location).format("h:mm A");
 
       var temp = Math.round((response.current.temp - 273.15) * 10) / 10;
@@ -57,9 +54,9 @@ var lng= 144.9
       var cList = $("#current-data");
 
       Object.keys(currentObject).forEach(function (item, index) {
-
-        var myLi = $("#li"+index).html("<b>"+item+"</b>" + ":\t\t\t\t" + currentObject[item])
-
+        var myLi = $("#li" + index).html(
+          "<b>" + item + "</b>" + ":\t\t\t\t" + currentObject[item]
+        );
       });
 
       $("#location").html(location);
@@ -83,15 +80,15 @@ var lng= 144.9
         $("#day" + index + "-date").html(forecastDate);
         $("#day" + index + "-img").attr("src", iconURL);
         $("#day" + index + "-img").attr("alt", "weatherimg");
-        $("#day" + index + "-minTemp").html("Min Temp:"+tempMin);
-        $("#day" + index + "-maxTemp").html("Max Temp:"+tempMax);
-        $("#day" + index + "-rh").html("Humidity:"+rh);
+        $("#day" + index + "-minTemp").html("Min Temp:" + tempMin);
+        $("#day" + index + "-maxTemp").html("Max Temp:" + tempMax);
+        $("#day" + index + "-rh").html("Humidity:" + rh);
       });
+      storeHistory(lat, lng, location);
     });
-
   }
 
-getWeather(lat,lng);
+  getWeather(lat, lng);
 
   $("#run-search").on("click", function (event) {
     // This line allows us to take advantage of the HTML "submit" property
@@ -105,9 +102,37 @@ getWeather(lat,lng);
       url: queryURLGeo,
       method: "GET",
     }).then(function (responseGeo) {
-     lat = responseGeo.results[0].geometry.location.lat;
-     lng = responseGeo.results[0].geometry.location.lng;
-     getWeather(lat,lng);
+      lat = responseGeo.results[0].geometry.location.lat;
+      lng = responseGeo.results[0].geometry.location.lng;
+      getWeather(lat, lng);
     });
   });
 });
+
+function storeHistory(lat, lng, location) {
+  var retrieveStorage = localStorage["searchHistory"];
+  var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
+  locationInfo.push({ ui: location, latitude: lat, longitude: lng });
+  var obj = {};
+  for (var i = 0, len = locationInfo.length; i < len; i++)
+    obj[locationInfo[i]["ui"]] = locationInfo[i];
+  locationInfo = new Array();
+  for (var key in obj) locationInfo.push(obj[key]);
+  localStorage["searchHistory"] = JSON.stringify(locationInfo);
+
+
+
+
+var searchList=document.getElementById("articleList")
+searchList.innerHTML=""
+
+for( let i=locationInfo.length-1; i>=Math.max((locationInfo.length-10),0); i--){
+tempLocation=locationInfo[i].ui;
+var listItem = document.createElement("LI");
+listItem.setAttribute("class", "list-group-item articleHeadline")
+listItem.innerHTML=tempLocation;
+searchList.append(listItem)
+}
+
+
+}
