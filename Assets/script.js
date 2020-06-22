@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  var myLocation = "Melbourne VIC, Australia";
   var lat = -37.8;
   var lng = 144.9;
   function myRGB(val) {
@@ -9,51 +10,44 @@ $(document).ready(function () {
     var max = 10;
     red = 0 + Math.round((val / 10) * 255);
     green = 255 - Math.round((val / 10) * 255);
-    myCol = "rgb(" + red + "," + green + "," + blue+")";
+    myCol = "rgb(" + red + "," + green + "," + blue + ")";
     return myCol;
   }
 
-  function buildGeoCodeURL() {
+  getWeather(lat, lng, myLocation);
+
+  function buildGeoCodeURL(searchTerm) {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
-
     var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
-
-    queryParams.address = $("#search-term").val().trim();
-
+    console.log(searchTerm)
+    queryParams.address = searchTerm.val().trim();
     return queryURLGeo + $.param(queryParams);
   }
-  // var queryURL = "https://api.openweathermap.org/data/2.5/weather?";
 
   function weatherURL(lat, lng) {
-currentLocation="1";
     var queryURL = "https://api.openweathermap.org/data/2.5/onecall?";
     // lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
     var queryParams = { appid: "c8a65159cdc7e9fd6ca2d010f396a049" };
     queryParams.lat = lat;
     queryParams.lon = lng;
-    return [queryURL + $.param(queryParams),currentLocation];
-    console.log(currentLocation)
-
-
-
-
+    return [queryURL + $.param(queryParams)];
   }
 
-  function getWeather() {
-    var queryURL = weatherURL(lat, lng)[0];
+  function getWeather(lat, lng, myLocation) {
+    var queryURL = weatherURL(lat, lng);
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-///watch this
+      ///watch this
 
-      var location = response.timezone;
+      var tzLocation = response.timezone;
       var unix_timestamp = response.current.dt;
       var date = moment
         .unix(unix_timestamp)
-        .tz(location)
+        .tz(tzLocation)
         .format("ddd, MMM Do, YYYY");
-      var time = moment.unix(unix_timestamp).tz(location).format("h:mm A");
+      var time = moment.unix(unix_timestamp).tz(tzLocation).format("h:mm A");
 
       var temp = Math.round((response.current.temp - 273.15) * 10) / 10;
       var rH = Math.round(response.current.humidity * 10) / 10;
@@ -81,16 +75,14 @@ currentLocation="1";
             "</span>"
         );
         if (item === "UV Index") {
-          var val=currentObject[item]
+          var val = currentObject[item];
           myCol = myRGB(val);
-          console.log(myCol);
           $("#id" + index).css("background-color", myCol);
           $("#id" + index).css("border-radius", "20%");
-
         }
       });
 
-      $("#location").html(location);
+      $("#location").html(myLocation);
       $("#date").html(date);
       $("#time").html(time);
 
@@ -115,47 +107,24 @@ currentLocation="1";
         $("#day" + index + "-maxTemp").html("Max Temp:\t" + tempMax);
         $("#day" + index + "-rh").html("Humidity:\t" + rh);
       });
-      storeHistory(lat, lng, location);
+      storeHistory(lat, lng, myLocation);
     });
   }
 
-  getWeather(lat, lng);
-
-  $("#run-search").on("click", function (event) {
-    // This line allows us to take advantage of the HTML "submit" property
-    // This way we can hit enter on the keyboard and it registers the search
-    // (in addition to clicks). Prevents the page from reloading on form submit.
-    event.preventDefault();
-
-    var queryURLGeo = buildGeoCodeURL();
-
-    $.ajax({
-      url: queryURLGeo,
-      method: "GET",
-    }).then(function (responseGeo) {
-
-      lat = responseGeo.results[0].geometry.location.lat;
-      lng = responseGeo.results[0].geometry.location.lng;
-      getWeather(lat, lng);
-    });
-  });
-
-
-
-  function storeHistory(lat, lng, location) {
+  function storeHistory(lat, lng, tzLocation) {
     var retrieveStorage = localStorage["searchHistory"];
     var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
-    locationInfo.push({ ui: location, latitude: lat, longitude: lng });
+    locationInfo.push({ ui: tzLocation, latitude: lat, longitude: lng });
     var obj = {};
     for (var i = 0, len = locationInfo.length; i < len; i++)
       obj[locationInfo[i]["ui"]] = locationInfo[i];
     locationInfo = new Array();
     for (var key in obj) locationInfo.push(obj[key]);
     localStorage["searchHistory"] = JSON.stringify(locationInfo);
-  
+
     var searchList = document.getElementById("articleList");
     searchList.innerHTML = "";
-  
+
     for (
       let i = locationInfo.length - 1;
       i >= Math.max(locationInfo.length - 10, 0);
@@ -164,34 +133,55 @@ currentLocation="1";
       tempLocation = locationInfo[i].ui;
       var listItem = document.createElement("LI");
       listItem.setAttribute("class", "list-group-item articleHeadline");
+      listItem.setAttribute("id", "liItem"+i);
       listItem.innerHTML = tempLocation;
       searchList.append(listItem);
     }
   }
 
-
-  
-  $("#articleList").on("click", function (event) {
-
+  $("#run-search").on("click", function (event) {
     event.preventDefault();
+    var queryURLGeo = buildGeoCodeURL($("#search-term"));
 
-    console.log(event.target)
-
-
-
-  //   var queryURLGeo = buildGeoCodeURL();
-
-  //   $.ajax({
-  //     url: queryURLGeo,
-  //     method: "GET",
-  //   }).then(function (responseGeo) {
-  //     lat = responseGeo.results[0].geometry.location.lat;
-  //     lng = responseGeo.results[0].geometry.location.lng;
-  //     getWeather(lat, lng);
-    // });
+    $.ajax({
+      url: queryURLGeo,
+      method: "GET",
+    }).then(function (responseGeo) {
+      lat = responseGeo.results[0].geometry.location.lat;
+      lng = responseGeo.results[0].geometry.location.lng;
+      myLocation = responseGeo.results[0].formatted_address;
+      console.log(myLocation);
+      getWeather(lat, lng, myLocation);
+    });
   });
 
 
+
+
+
+  $("#articleList").on("click", function (event) {
+    event.preventDefault();
+    var searchVal = event.target.innerHTML
+    console.log(searchVal)
+    var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
+    var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
+    queryParams.address = searchVal;
+    queryURLGeo = queryURLGeo + $.param(queryParams);
+    console.log(queryURLGeo)
+    $.ajax({
+      url: queryURLGeo,
+      method: "GET",
+    }).then(function (responseGeo) {
+      lat = responseGeo.results[0].geometry.location.lat;
+      lng = responseGeo.results[0].geometry.location.lng;
+      myLocation = responseGeo.results[0].formatted_address;
+      console.log(myLocation);
+      getWeather(lat, lng, myLocation);
+    });
+
+
+
+
+
+  });
 });
-
-
