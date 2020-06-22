@@ -2,6 +2,7 @@ $(document).ready(function () {
   var myLocation = "Melbourne VIC, Australia";
   var lat = -37.8;
   var lng = 144.9;
+  // A function to render a color based on a value between 0 to 10
   function myRGB(val) {
     var red = 0;
     var green = 0;
@@ -14,12 +15,14 @@ $(document).ready(function () {
     return myCol;
   }
 
+  // Call function to get current weather for default location
   getWeather(lat, lng, myLocation);
+  // Render location search history to DOM
   var retrieveStorage = localStorage["searchHistory"];
   var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
   renderHistory(locationInfo)
 
-
+// A function to build the google geocode query URL
   function buildGeoCodeURL(searchTerm) {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
     var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
@@ -27,6 +30,7 @@ $(document).ready(function () {
     return queryURLGeo + $.param(queryParams);
   }
 
+  // A function to build the query url to retrieve weather data from openweathermap.org
   function weatherURL(lat, lng) {
     var queryURL = "https://api.openweathermap.org/data/2.5/onecall?";
     // lat={lat}&lon={lon}&exclude={part}&appid={YOUR API KEY}
@@ -35,23 +39,23 @@ $(document).ready(function () {
     queryParams.lon = lng;
     return [queryURL + $.param(queryParams)];
   }
-
+// An AJAX call and function to retrieve weather data from openweathermap.org
   function getWeather(lat, lng, myLocation) {
     var queryURL = weatherURL(lat, lng);
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-      ///watch this
-
       var tzLocation = response.timezone;
       var unix_timestamp = response.current.dt;
+      // Current date and time at the location searched from unix timestamp
       var date = moment
         .unix(unix_timestamp)
         .tz(tzLocation)
         .format("ddd, MMM Do, YYYY");
       var time = moment.unix(unix_timestamp).tz(tzLocation).format("h:mm A");
 
+      // The weather data to be displayed
       var temp = Math.round((response.current.temp - 273.15) * 10) / 10;
       var rH = Math.round(response.current.humidity * 10) / 10;
       var windSpeed = Math.round(response.current.wind_speed * 10) / 10;
@@ -63,6 +67,7 @@ $(document).ready(function () {
         "Wind Speed": windSpeed,
         "UV Index": UVIndex,
       };
+      
       var cList = $("#current-data");
 
       Object.keys(currentObject).forEach(function (item, index) {
