@@ -76,8 +76,11 @@ text-align: center;
 
 .forecast-margin{
   margin-top: 2%;
-margin-left: 3%;
+margin-left: 6%;
 font-size: 100%;
 
 }
 
+.centered{
+  text-align: center;
+}
