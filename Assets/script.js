@@ -15,11 +15,14 @@ $(document).ready(function () {
   }
 
   getWeather(lat, lng, myLocation);
+  var retrieveStorage = localStorage["searchHistory"];
+  var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
+  renderHistory(locationInfo)
+
 
   function buildGeoCodeURL(searchTerm) {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
     var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
-    console.log(searchTerm)
     queryParams.address = searchTerm.val().trim();
     return queryURLGeo + $.param(queryParams);
   }
@@ -78,6 +81,9 @@ $(document).ready(function () {
           var val = currentObject[item];
           myCol = myRGB(val);
           $("#id" + index).css("background-color", myCol);
+          $("#id" + index).css("color", "white");
+          $("#id" + index).css("font-weight", "bold");
+
           $("#id" + index).css("border-radius", "20%");
         }
       });
@@ -107,24 +113,15 @@ $(document).ready(function () {
         $("#day" + index + "-maxTemp").html("Max Temp:\t" + tempMax);
         $("#day" + index + "-rh").html("Humidity:\t" + rh);
       });
-      storeHistory(lat, lng, myLocation);
+      
     });
   }
 
-  function storeHistory(lat, lng, tzLocation) {
-    var retrieveStorage = localStorage["searchHistory"];
-    var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
-    locationInfo.push({ ui: tzLocation, latitude: lat, longitude: lng });
-    var obj = {};
-    for (var i = 0, len = locationInfo.length; i < len; i++)
-      obj[locationInfo[i]["ui"]] = locationInfo[i];
-    locationInfo = new Array();
-    for (var key in obj) locationInfo.push(obj[key]);
-    localStorage["searchHistory"] = JSON.stringify(locationInfo);
+
+  function renderHistory(locationInfo) {
 
     var searchList = document.getElementById("articleList");
     searchList.innerHTML = "";
-
     for (
       let i = locationInfo.length - 1;
       i >= Math.max(locationInfo.length - 10, 0);
@@ -133,10 +130,27 @@ $(document).ready(function () {
       tempLocation = locationInfo[i].ui;
       var listItem = document.createElement("LI");
       listItem.setAttribute("class", "list-group-item articleHeadline");
-      listItem.setAttribute("id", "liItem"+i);
+      listItem.setAttribute("id", "liItem" + i);
       listItem.innerHTML = tempLocation;
       searchList.append(listItem);
     }
+  }
+
+
+
+  function storeHistory(lat, lng, myLocation) {
+    var retrieveStorage = localStorage["searchHistory"];
+    var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
+    locationInfo.push({ ui: myLocation, latitude: lat, longitude: lng });
+    var obj = {};
+    for (var i = 0, len = locationInfo.length; i < len; i++)
+      obj[locationInfo[i]["ui"]] = locationInfo[i];
+    locationInfo = new Array();
+    for (var key in obj) locationInfo.push(obj[key]);
+    localStorage["searchHistory"] = JSON.stringify(locationInfo);
+
+    renderHistory(locationInfo)
+
   }
 
   $("#run-search").on("click", function (event) {
@@ -150,24 +164,19 @@ $(document).ready(function () {
       lat = responseGeo.results[0].geometry.location.lat;
       lng = responseGeo.results[0].geometry.location.lng;
       myLocation = responseGeo.results[0].formatted_address;
-      console.log(myLocation);
       getWeather(lat, lng, myLocation);
+      storeHistory(lat, lng, myLocation);
     });
+
   });
-
-
-
-
 
   $("#articleList").on("click", function (event) {
     event.preventDefault();
-    var searchVal = event.target.innerHTML
-    console.log(searchVal)
+    var searchVal = event.target.innerHTML;
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
     var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
     queryParams.address = searchVal;
     queryURLGeo = queryURLGeo + $.param(queryParams);
-    console.log(queryURLGeo)
     $.ajax({
       url: queryURLGeo,
       method: "GET",
@@ -175,13 +184,14 @@ $(document).ready(function () {
       lat = responseGeo.results[0].geometry.location.lat;
       lng = responseGeo.results[0].geometry.location.lng;
       myLocation = responseGeo.results[0].formatted_address;
-      console.log(myLocation);
       getWeather(lat, lng, myLocation);
     });
+  });
 
 
+  $("#clear-all").on("click", function(event){
 
-
+    localStorage.removeItem("searchHistory");
 
   });
 });
