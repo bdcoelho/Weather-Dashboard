@@ -1,6 +1,6 @@
 # 06 Server-Side APIs: Weather Dashboard
 
-#### Live application can be accessed here [Weather Dashboard](https://bdcoelho.github.io/Weather-Dashboard/ "Live Weather Application")
+#### Live application can be accessed here: [Weather Dashboard](https://bdcoelho.github.io/Weather-Dashboard/ "Live Weather Application")
 
 
 The weather dashboard allows a user to look up live weather information and store recent weather searches. The target audience is travellers wanting to plan their trip while staying aware of weather conditions at the destination and along the route. The application currently allows 10 unique locations to be stored. The limit is purely for aesthetic reasons.
@@ -9,7 +9,7 @@ Searching is made easy by incorporating the Google Geocoding API to intelligentl
 
 ## Screenshots
 
-Below are screenshots of the desktop and mobile versions 
+Below are screenshots of the desktop and mobile versions.
 
 #### Desktop Version
 
