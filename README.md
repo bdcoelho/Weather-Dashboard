@@ -1,5 +1,23 @@
 # 06 Server-Side APIs: Weather Dashboard
 
+#### Live application can be accessed here [Weather Dashboard](https://bdcoelho.github.io/Weather-Dashboard/ "Live Weather Application")
+
+
+The weather dashboard allows a user to look up live weather information and store recent weather searches. The target audience is travellers wanting to plan their trip while staying aware of weather conditions at the destination and along the route. The application currently allows 10 unique locations to be stored. The limit is purely for aesthetic reasons.
+
+Searching is made easy by incorporating the Google Geocoding API to intelligently retrieve coordinates for a location. This removes the need for the user to enter exact location names in a specific format. Live weather conditions are displayed at the top of the screen. The UV index is rendered from green to red depending on the severity of UV radiation. A forecast for the next 5 days is displayed at the bottom of the main panel on the right side. The application is designed to be responsive across a range of screen sizes.
+
+## Screenshots
+
+Below are screenshots of the desktop and mobile versions 
+
+#### Desktop Version
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+#### Mobile Version
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 
 ## User Story
 
