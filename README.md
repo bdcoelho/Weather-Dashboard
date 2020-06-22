@@ -13,11 +13,11 @@ Below are screenshots of the desktop and mobile versions
 
 #### Desktop Version
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![Desktop Version](https://github.com/bdcoelho/Weather-Dashboard/blob/master/Assets/Screenshot_Desktop.png "Desktop Version")
 
 #### Mobile Version
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![Mobile Version](https://github.com/bdcoelho/Weather-Dashboard/blob/master/Assets/Screenshot_Mobile.png "Mobile Version")
 
 ## User Story
 
