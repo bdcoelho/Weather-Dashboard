@@ -67,9 +67,8 @@ $(document).ready(function () {
         "Wind Speed": windSpeed,
         "UV Index": UVIndex,
       };
-      
-      var cList = $("#current-data");
 
+// Populate current weather
       Object.keys(currentObject).forEach(function (item, index) {
         var myLi = $("#li" + index).html(
           "<b>" +
@@ -82,6 +81,7 @@ $(document).ready(function () {
             currentObject[item] +
             "</span>"
         );
+        // Render UV Index from green to red depending on severity
         if (item === "UV Index") {
           var val = currentObject[item];
           myCol = myRGB(val);
@@ -92,12 +92,15 @@ $(document).ready(function () {
           $("#id" + index).css("border-radius", "20%");
         }
       });
-
+// Add location date and time to current weather main panel
       $("#location").html(myLocation);
       $("#date").html(date);
       $("#time").html(time);
 
+      // Limit forecast to 5 days in the future
       var dailyForecastArray = response.daily.slice(1, 6);
+      
+      // Add details to the forecast tab
       dailyForecastArray.forEach(function (item, index, array) {
         var dayTS = dailyForecastArray[index].dt;
         var weatherIcon = dailyForecastArray[index].weather[0].icon;
@@ -123,10 +126,10 @@ $(document).ready(function () {
     });
   }
 
-
+// A function to render the location search history from local storage
   function renderHistory(locationInfo) {
 
-    var searchList = document.getElementById("articleList");
+    var searchList = document.getElementById("searchList");
     searchList.innerHTML = "";
     for (
       let i = locationInfo.length - 1;
@@ -135,15 +138,14 @@ $(document).ready(function () {
     ) {
       tempLocation = locationInfo[i].ui;
       var listItem = document.createElement("LI");
-      listItem.setAttribute("class", "list-group-item articleHeadline");
+      listItem.setAttribute("class", "list-group-item");
       listItem.setAttribute("id", "liItem" + i);
       listItem.innerHTML = tempLocation;
       searchList.append(listItem);
     }
   }
 
-
-
+// A function to store new search history to local storage
   function storeHistory(lat, lng, myLocation) {
     var retrieveStorage = localStorage["searchHistory"];
     var locationInfo = retrieveStorage ? JSON.parse(retrieveStorage) : [];
@@ -158,7 +160,7 @@ $(document).ready(function () {
     renderHistory(locationInfo)
 
   }
-
+// Event listener for search button and enter in search bar
   $("#run-search").on("click", function (event) {
     event.preventDefault();
     var queryURLGeo = buildGeoCodeURL($("#search-term"));
@@ -175,8 +177,8 @@ $(document).ready(function () {
     });
 
   });
-
-  $("#articleList").on("click", function (event) {
+// Event listener for click on search history
+  $("#searchList").on("click", function (event) {
     event.preventDefault();
     var searchVal = event.target.innerHTML;
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
@@ -194,7 +196,7 @@ $(document).ready(function () {
     });
   });
 
-
+// Event listener to clear location search history
   $("#clear-all").on("click", function(event){
 
     localStorage.removeItem("searchHistory");

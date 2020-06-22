@@ -71,3 +71,10 @@ ul {
 .centered {
   text-align: center;
 }
+
+
+@media screen and (max-width: 768px) {
+  .testClass {
+    background-color: #333;
+  }
+}
