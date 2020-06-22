@@ -109,6 +109,7 @@ $(document).ready(function () {
         $("#day" + index + "-date").html(forecastDate);
         $("#day" + index + "-img").attr("src", iconURL);
         $("#day" + index + "-img").attr("alt", "weatherimg");
+        $("#day" + index + "-img").attr("class", "img-fluid");
         $("#day" + index + "-minTemp").html("Min Temp:\t" + tempMin);
         $("#day" + index + "-maxTemp").html("Max Temp:\t" + tempMax);
         $("#day" + index + "-rh").html("Humidity:\t" + rh);
