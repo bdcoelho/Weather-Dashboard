@@ -54,13 +54,7 @@ ul{
   margin-left: 4%;
 }
 
-.bottom-panel-1{
-  background-color: rgb(54, 104, 155);
-  color: white;
-margin: 1.1%;
-padding: 1% 0% 1% 2%;
 
- }
 
 .bottom-panel-2{
 
@@ -68,9 +62,22 @@ padding: 1% 0% 1% 2%;
   margin: 1%;
 
 }
+
+
+.bottom-panel-1{
+  background-color: rgb(54, 104, 155);
+  color: white;
+margin: 0.5%;
+padding: 1% 0% 1% 0%;
+text-align: center;
+
+ }
+
+
 .forecast-margin{
   margin-top: 2%;
 margin-left: 3%;
 font-size: 100%;
 
 }
+

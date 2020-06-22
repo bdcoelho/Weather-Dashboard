@@ -36,7 +36,7 @@
   </head>
 
   <body>
-    <!-- Main Bootstrap Search -->
+    <!-- Jumbotron for Title -->
     <div class="jumbotron my-header">
       <h1 class="text-center">
         <strong> Weather Dashboard</strong>
@@ -44,45 +44,41 @@
     </div>
 
     <div class="container">
-      <!-- Jumbotron for Title -->
-
-      <!-- Row for Searching New York Times -->
       <div class="row">
         <div class="col-sm-12 col-lg-3 col-md-12 left-panel">
-          <!-- Here we create the text box for capturing the search term-->
           <form role="form">
-          <div class="search-box">
-            <h3>Search for a city</h3>
-            <input type="text" class="form-control" id="search-term" placeholder="Melbourne,Australia"/>
-            <button
-              type="submit"
-              class="btn btn-primary btn-font"
-              id="run-search"
-            >
-              <i class="fa fa-search"></i> Search
-            </button>
-          </div>
-
-          <div class="card">
-            <!-- card Heading for the retrieved articles box -->
-            <div class="card-header">
-              <strong> <i class="fa fa-table"></i> Your Searches</strong>
+            <div class="search-box">
+              <h3>Search for a city</h3>
+              <input
+                type="text"
+                class="form-control"
+                id="search-term"
+                placeholder="Melbourne,Australia"
+              />
+              <button
+                type="submit"
+                class="btn btn-primary btn-font"
+                id="run-search"
+              >
+                <i class="fa fa-search"></i> Search
+              </button>
             </div>
 
-            <!-- This main card will hold each of the resulting articles -->
-            <div class="card-body" id="article-section">
-<ul id="articleList" class="list-group">
+            <div class="card">
+              <!-- card Heading for the retrieved articles box -->
+              <div class="card-header">
+                <strong> <i class="fa fa-table"></i> Your Searches</strong>
+              </div>
 
-</ul>
-</form>
+              <!-- This main card will hold each of the resulting articles -->
+              <ul id="articleList" class="list-group"></ul>
             </div>
-            <button class="btn btn-default" id="clear-all">
-              <i class="fa fa-trash"></i> Clear Results</button>
-  
-          </div>
+          </form>
 
+          <button class="btn btn-default btn-center" id="clear-all">
+            <i class="fa fa-trash"></i> Clear Searches
+          </button>
         </div>
-
         <div class="col-sm-12 col-lg-9 col-md-12 main-panel">
           <div class="row row-top border border-secondary border-bottom-0">
             <div class="col-sm-6">
@@ -91,12 +87,11 @@
               </h3>
             </div>
             <div class="col-sm-6">
-              <h3 id="date" class="d-flex flex-row-reverse">
-              </h3>
-              <h4 id="time" class="d-flex flex-row-reverse">
-              </h4>
+              <h3 id="date" class="d-flex flex-row-reverse"></h3>
+              <h4 id="time" class="d-flex flex-row-reverse"></h4>
             </div>
           </div>
+
           <div class="row row-top border border-secondary border-top-0">
             <ul id="current-data">
               <li id="li0"></li>
@@ -105,55 +100,54 @@
               <li id="li3"></li>
             </ul>
           </div>
+
           <div class="row forecast-margin">
-            <div id="day0" class="col-sm-2 bottom-panel-1">
+            <div id="day0" class="col-11 col-md-2 bottom-panel-1">
               <div id="day0-date"></div>
               <img id="day0-img" src="" alt="" />
               <div id="day0-minTemp"></div>
               <div id="day0-maxTemp"></div>
               <div id="day0-rh"></div>
             </div>
-            <div id="day1" class="col-sm-2 bottom-panel-1">
+            <div id="day1" class="col-11 col-md-2 bottom-panel-1">
               <div id="day1-date"></div>
               <img id="day1-img" src="" alt="" />
               <div id="day1-minTemp"></div>
               <div id="day1-maxTemp"></div>
               <div id="day1-rh"></div>
             </div>
-            <div id="day2" class="col-sm-2 bottom-panel-1">
+            <div id="day2" class="col-11 col-md-2 bottom-panel-1">
               <div id="day2-date"></div>
               <img id="day2-img" src="" alt="" />
               <div id="day2-minTemp"></div>
               <div id="day2-maxTemp"></div>
               <div id="day2-rh"></div>
             </div>
-            <div id="day3" class="col-sm-2 bottom-panel-1">
+            <div id="day3" class="col-11 col-md-2 bottom-panel-1">
               <div id="day3-date"></div>
               <img id="day3-img" src="" alt="" />
               <div id="day3-minTemp"></div>
               <div id="day3-maxTemp"></div>
               <div id="day3-rh"></div>
             </div>
-            <div id="day4" class="col-sm-2 bottom-panel-1">
+            <div id="day4" class="col-11 col-md-2 bottom-panel-1">
               <div id="day4-date"></div>
               <img id="day4-img" src="" alt="" />
               <div id="day4-minTemp"></div>
               <div id="day4-maxTemp"></div>
               <div id="day4-rh"></div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
-<br><br>
+
+    <br /><br />
     <!-- jQuery JS -->
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-
-    
     <script src="./Assets/moment-timezone-with-data.js"></script>
     <script src="./Assets/script.js"></script>
   </body>
