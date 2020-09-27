@@ -25,7 +25,7 @@ $(document).ready(function () {
 // A function to build the google geocode query URL
   function buildGeoCodeURL(searchTerm) {
     var queryURLGeo = "https://maps.googleapis.com/maps/api/geocode/json?";
-    var queryParams = { key: "AIzaSyAwmiVLmIUNhiWqaGiGzlHl7WIec1ST8Ys" };
+    var queryParams = { key: "AIzaSyDyO_UovT4ONWNjfYGnYpN_EnFBaw9Bolg" };
     queryParams.address = searchTerm.val().trim();
     return queryURLGeo + $.param(queryParams);
   }
